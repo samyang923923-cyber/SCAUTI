@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>🐮 SCAU · 校园人格测试</title>
+  <!-- 清新风格，柔和色调 -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(145deg, #f9f5e9 0%, #e7f3d3 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+
+    .test-container {
+      width: 100%;
+      max-width: 500px;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 40px;
+      box-shadow: 0 25px 40px -10px rgba(40, 60, 20, 0.2),
+                  0 8px 20px rgba(0,0,0,0.05),
+                  inset 0 1px 0 rgba(255,255,255,0.8);
+      border: 1px solid rgba(200, 220, 150, 0.3);
+      padding: 24px 20px 30px;
+      transition: all 0.2s ease;
+    }
+
+    /* 头部区域 */
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      background: linear-gradient(135deg, #3f5e2b, #6f8c5e);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .header h1 span {
+      background: #fff3d1;
+      padding: 2px 12px;
+      border-radius: 60px;
+      font-size: 14px;
+      color: #5f6e3b;
+      border: 1px solid #d0dba8;
+      backdrop-filter: blur(4px);
+    }
+
+    .subhead {
+      color: #5a6e48;
+      font-weight: 400;
+      font-size: 15px;
+      border-bottom: 1px dashed #b9cf9e;
+      padding-bottom: 16px;
+      margin-bottom: 8px;
+    }
+
+    /* 进度条/状态 */
+    .progress-area {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .badge-step {
+      background: #cbdbb2;
+      padding: 6px 16px;
+      border-radius: 40px;
+      color: #2b3e1e;
+      font-weight: 500;
+      font-size: 14px;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .progress-bar-bg {
+      flex: 1;
+      height: 6px;
+      background: #e0e7d3;
+      border-radius: 10px;
+      margin: 0 12px;
+    }
+
+    .progress-bar-fill {
+      height: 6px;
+      border-radius: 10px;
+      background: #7fa65a;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    /* 卡片 */
+    .question-card {
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: 32px;
+      padding: 26px 20px;
+      margin-bottom: 24px;
+      border: 1px solid rgba(230, 240, 210, 0.9);
+      box-shadow: 0 10px 18px -8px rgba(60, 70, 30, 0.08);
+    }
+
+    .question-text {
+      font-size: 22px;
+      font-weight: 620;
+      line-height: 1.4;
+      color: #2d401f;
+      margin-bottom: 28px;
+      padding-left: 4px;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .option {
+      background: white;
+      border-radius: 22px;
+      padding: 16px 18px;
+      border: 1.5px solid #dae2c8;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.02);
+      font-size: 16px;
+      color: #2d3a1f;
+      font-weight: 500;
+      transition: all 0.15s;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      backdrop-filter: blur(4px);
+    }
+
+    .option:hover {
+      background: #f4fbe9;
+      border-color: #a2b98b;
+    }
+
+    .option.selected {
+      background: #e3efcf;
+      border: 2px solid #7fa65a;
+      box-shadow: 0 6px 12px -6px #7fa65a60;
+      color: #1e3313;
+      font-weight: 560;
+    }
+
+    .option-prefix {
+      width: 30px;
+      height: 30px;
+      background: #eef3e2;
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #4f6b35;
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .option.selected .option-prefix {
+      background: #7fa65a;
+      color: white;
+    }
+
+    /* 按钮组 */
+    .action-buttons {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .btn {
+      background: white;
+      border: none;
+      padding: 16px 24px;
+      border-radius: 60px;
+      font-weight: 600;
+      font-size: 16px;
+      color: #3a5627;
+      border: 1px solid #c3d6aa;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+      transition: all 0.2s;
+      flex: 1;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background: #7fa65a;
+      border: 1px solid #6b8f49;
+      color: white;
+      box-shadow: 0 8px 14px -6px #6f8e4e80;
+    }
+
+    .btn-primary:hover {
+      background: #6e9450;
+      transform: scale(0.98);
+    }
+
+    .btn:disabled {
+      opacity: 0.4;
+      pointer-events: none;
+      filter: grayscale(0.3);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid #b1c79a;
+    }
+
+    /* 开始页/结果页共用卡片 */
+    .start-card, .result-card {
+      text-align: center;
+      padding: 8px 4px;
+    }
+
+    .personality-badge {
+      background: #f4f1e0;
+      border-radius: 120px;
+      padding: 12px 24px;
+      display: inline-block;
+      margin: 20px 0 16px;
+      border: 2px dashed #8aa66b;
+    }
+
+    .result-icon {
+      font-size: 70px;
+      margin-bottom: 6px;
+    }
+
+    .result-title {
+      font-size: 36px;
+      font-weight: 800;
+      color: #2d4d18;
+      line-height: 1.2;
+    }
+
+    .result-sub {
+      color: #5e7943;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    .result-desc {
+      background: #fffcf2;
+      border-radius: 28px;
+      padding: 22px 18px;
+      text-align: left;
+      font-size: 15px;
+      color: #344e21;
+      border: 1px solid #d1dfbc;
+      margin: 24px 0;
+      line-height: 1.65;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.02);
+    }
+
+    .stats-highlight {
+      font-weight: 700;
+      color: #3f6625;
+      background: #ebf5da;
+      display: inline-block;
+      padding: 2px 12px;
+      border-radius: 30px;
+      margin-right: 6px;
+    }
+
+    .footer-note {
+      margin-top: 20px;
+      color: #7d9370;
+      font-size: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .restart-link {
+      color: #5d7e42;
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      cursor: pointer;
+    }
+
+    /* 隐藏辅助 */
+    .hidden {
+      display: none !important;
+    }
+
+    .small-note {
+      color: #7e8f6e;
+      margin-top: 6px;
+      font-size: 13px;
+    }
+
+    /* 奶牛人/喵信徒特别点缀 */
+    .cow-spot::after {
+      content: "🐄";
+    }
+  </style>
+  <!-- Font Awesome (简洁图标库) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+<div class="test-container" id="appContainer">
+  <!-- 动态视图区域 -->
+  <div id="viewStart" class="start-card">
+    <div class="header">
+      <h1>🐾 SCAU·灵魂检测 <span>华农特供</span></h1>
+      <div class="subhead">奶牛人? 喵信徒? 早八战神? <br>测出你的隐藏校园人格</div>
+    </div>
+    <div style="margin: 30px 0 20px; font-size: 55px;">🧑‍🌾🐈☂️</div>
+    <div style="background: #eef3e2; border-radius: 40px; padding: 18px; margin-bottom: 30px; color: #385e1f;">
+      <i class="fas fa-seedling" style="margin-right: 6px;"></i> 仅占0.03%的温柔收藏家 · 0.0002%的奶牛人 <br>都在这里被发现
+    </div>
+    <button class="btn btn-primary" id="startBtn" style="padding: 18px; font-size: 18px;">
+      <i class="fas fa-play" style="margin-right: 8px;"></i>开始人格探索
+    </button>
+    <div class="footer-note">
+      <span>🐮 酸奶续命 · 喵喵教</span>
+    
+    </div>
+  </div>
+
+  <div id="viewQuiz" class="hidden">
+    <div class="header">
+      <h1>🌱 SCAU·人格测试 <span>第 <span id="currentQNumber">1</span>/<span id="totalQNumber">8</span></span></h1>
+    </div>
+    <div class="progress-area">
+      <div class="badge-step"><i class="far fa-clipboard"></i> 答题中</div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progressFill" style="width: 12.5%;"></div>
+      </div>
+    </div>
+    <div class="question-card">
+      <div class="question-text" id="questionText">加载题目中...</div>
+      <div class="options" id="optionsContainer"></div>
+    </div>
+    <div class="action-buttons">
+      <button class="btn btn-outline" id="prevBtn" disabled><i class="fas fa-chevron-left"></i> 上一题</button>
+      <button class="btn btn-primary" id="nextBtn">下一题 <i class="fas fa-chevron-right"></i></button>
+    </div>
+    <div class="small-note" style="text-align: center; margin-top: 16px;">
+      <i class="far fa-heart"></i> 凭直觉选，你是最特别的SCAUer
+    </div>
+  </div>
+
+  <div id="viewResult" class="result-card hidden">
+    <div class="header">
+      <h1>✨ 你的SCAU人格 <span>鉴定书</span></h1>
+    </div>
+    <div id="resultContent">
+      <!-- 动态渲染结果 -->
+    </div>
+    <button class="btn btn-primary" id="restartBtn" style="margin-top: 12px;"><i class="fas fa-undo-alt"></i> 再测一次</button>
+    <div class="footer-note">
+      <span>🐱 SMILEandMEOW · 华农学士</span>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  (function(){
+    "use strict";
+
+    // ----- 人格类型定义 (完全依据图片文案) -----
+    const PERSONALITIES = {
+      CAT: 'cat',        // 喵信徒
+      COW: 'cow',        // 奶牛人
+      EARLY: 'early',    // 早八人
+      UMBRELLA: 'umbrella', // 雨伞持有者
+      SCAUER: 'scauer'   // 华农特质型
+    };
+
+    // 人格详细信息 (卡片展示)
+    const personalityDetails = {
+      [PERSONALITIES.CAT]: {
+        name: '喵信徒',
+        tagline: 'SMILEandMEOW · 我信仰喵喵教！',
+        icon: '🐱🙌',
+        desc: `恭喜您，您解锁的是治愈系稀有人格，仅占世界人口0.03%。<br><br>
+              吸猫人内心柔软且充满善意，热爱所有毛茸茸的小生命，在校园里一碰见小猫就会立刻停下脚步，蹲下来发出软乎乎的怪动静。这种人格能精准感知到校园里每一只小猫的出没位置，那就是他们心里最向往的治愈栖息地。走进吸猫人的生活，就像走进了一个治愈乌托邦：永远为可爱心软，永远为毛茸茸奔赴，您是仅占0.03%的校园温柔收藏家。`,
+        highlight: '🐈 喵喵教 · 仅0.03%',
+        extra: 'SMILEandMEOW'
+      },
+      [PERSONALITIES.COW]: {
+        name: '奶牛人',
+        tagline: 'COW-MAN · 农农 华农学士 原味酸牛奶',
+        icon: '🐄🥛',
+        desc: `恭喜您，您测出的不是一个普通人格，您是一种极其珍稀的，仅占世界人口0.0002%的奶牛人。奶牛人们的内心通常充满活力，热爱自然与阳光，偶尔也会犯点小小糊涂，因此这种人格能精确地感知到周围最鲜美的草甸位置也就是他们心里最向往的栖息地。走进奶牛人的生活，就像走进了一个梦幻牧场：需要充足的阳光和鲜嫩草，您是一种极其珍稀的，仅占0.1%的情感交流。（啊好想炫酸奶！）`,
+        highlight: '🐮 0.0002% · 梦幻牧场主',
+        extra: 'COW-MAN · 酸奶原教旨主义者'
+      },
+      [PERSONALITIES.EARLY]: {
+        name: '早八人',
+        tagline: 'A!LATER · 啊！等等，要迟到了',
+        icon: '⏰🏃',
+        desc: `早八人们的日常被清晨的闹钟唤醒，穿梭在校园马路，为了不迟到全力冲刺。他们是时间追赶者，在忙碌中寻找生活的节奏，像清晨第一阳光，怀揣活力与执着，奔向属于自己的战场，给早八的一杯咖啡，开启忙碌的早间时光。`,
+        highlight: '🏁 时间追赶者 · 永远在路上',
+        extra: '早八战神 · 咖啡续命'
+      },
+      [PERSONALITIES.UMBRELLA]: {
+        name: '雨伞持有者',
+        tagline: 'Umbrella-Keeper · 清明时节雨纷纷…',
+        icon: '☔️🌧️',
+        desc: `恭喜您，您与99%的华农人达成【记得带伞】默契成就！近几月，无论下的是倾盆大雨还是补水喷雾，都要抓紧手中的雨伞。忘记带伞怎么办？捂住头发向前冲吧！您拥有未雨绸缪的从容，也是雨季的守护者。`,
+        highlight: '☂️ 与99%华农人达成带伞默契',
+        extra: 'Umbrella-Keeper · 雨再大也不怕'
+      },
+      [PERSONALITIES.SCAUER]: {
+        name: '华农特质型',
+        tagline: 'SCAUer · 我真的…是华农特质型吗？',
+        icon: '🌾🧑‍🌾',
+        desc: `走进SCAUer的生活，就像走进巨型田园乐园：有试验田的泥土香，有西点屋的甜香，有五湖四海的绿意，当然还有一群踏踏实实又鲜活的灵魂。给SCAUer一份信任，乐于行动的他们会用行动给你较稳的答案。`,
+        highlight: '🌿 五湖四海 · 田园实干家',
+        extra: 'SCAUer · 踏实浪漫'
+      }
+    };
+
+    // ---------- 测试题目 (8题，融合校园情境) ----------
+    const questions = [
+      {
+        question: "清晨闹钟响起，你通常的第一反应是？",
+        options: [
+          { text: "😴 再睡五分钟，然后冲刺去教室", scores: { [PERSONALITIES.EARLY]: 1 } },
+          { text: "🌧️ 先看看窗外有没有下雨", scores: { [PERSONALITIES.UMBRELLA]: 1 } },
+          { text: "🥛 好想喝一杯华农酸奶", scores: { [PERSONALITIES.COW]: 1 } },
+          { text: "🐱 打开手机看校园猫猫bot", scores: { [PERSONALITIES.CAT]: 1 } },
+          { text: "🌱 盘算今天去哪个饭堂/试验田", scores: { [PERSONALITIES.SCAUER]: 1 } }
+        ]
+      },
+      {
+        question: "走在华农校道，什么最能吸引你停下脚步？",
+        options: [
+          { text: "🐈 路边打滚的流浪猫", scores: { [PERSONALITIES.CAT]: 1 } },
+          { text: "🌿 大片草坪和晒太阳的奶牛雕塑", scores: { [PERSONALITIES.COW]: 1 } },
+          { text: "🚲 飞驰而过的同学——啊我也要迟到了", scores: { [PERSONALITIES.EARLY]: 1 } },
+          { text: "☔️ 撑着伞慢慢走的人，或者突然飘雨", scores: { [PERSONALITIES.UMBRELLA]: 1 } },
+          { text: "🍞 西点屋飘出的面包香", scores: { [PERSONALITIES.SCAUER]: 1 } }
+        ]
+      },
+      {
+        question: "如果突然下起大雨，你会？",
+        options: [
+          { text: "🐱 担心猫猫有没有地方躲雨", scores: { [PERSONALITIES.CAT]: 1 } },
+          { text: "🥛 冲进超市买瓶酸奶顺便避雨", scores: { [PERSONALITIES.COW]: 1 } },
+          { text: "🏃 为了不迟到冒雨狂奔", scores: { [PERSONALITIES.EARLY]: 1 } },
+          { text: "☔️ 从容地从包里拿出伞 (早有准备)", scores: { [PERSONALITIES.UMBRELLA]: 1 } },
+          { text: "🌧️ 观察雨水对试验田的影响", scores: { [PERSONALITIES.SCAUER]: 1 } }
+        ]
+      },
+      {
+        question: "你心中最治愈的校园角落是？",
+        options: [
+          { text: "🐾 猫咪常出没的灌木丛", scores: { [PERSONALITIES.CAT]: 1 } },
+          { text: "🌳 酸奶店旁的大草坪", scores: { [PERSONALITIES.COW]: 1 } },
+          { text: "🏫 离教学楼最近的捷径", scores: { [PERSONALITIES.EARLY]: 1 } },
+          { text: "🏠 有屋檐能避雨的长廊", scores: { [PERSONALITIES.UMBRELLA]: 1 } },
+          { text: "🌾 试验田边/西点屋门口", scores: { [PERSONALITIES.SCAUER]: 1 } }
+        ]
+      },
+      {
+        question: "哪个词最能描述你的校园生活状态？",
+        options: [
+          { text: "🐱 软乎乎 · 治愈", scores: { [PERSONALITIES.CAT]: 1 } },
+          { text: "🐮 阳光 · 偶尔犯糊涂", scores: { [PERSONALITIES.COW]: 1 } },
+          { text: "⏳ 匆忙 · 追赶时间", scores: { [PERSONALITIES.EARLY]: 1 } },
+          { text: "☔️ 未雨绸缪 · 默契", scores: { [PERSONALITIES.UMBRELLA]: 1 } },
+          { text: "🌾 踏实 · 田园烟火", scores: { [PERSONALITIES.SCAUER]: 1 } }
+        ]
+      },
+      {
+        question: "假如你有一笔钱改善校园，你会优先？",
+        options: [
+          { text: "🐈 建立流浪猫救助站", scores: { [PERSONALITIES.CAT]: 1 } },
+          { text: "🥛 多开几家酸奶铺/奶牛科普角", scores: { [PERSONALITIES.COW]: 1 } },
+          { text: "🚲 增加共享单车/优化早八路线", scores: { [PERSONALITIES.EARLY]: 1 } },
+          { text: "🌂 修建更多风雨连廊", scores: { [PERSONALITIES.UMBRELLA]: 1 } },
+          { text: "🌻 美化试验田景观与休息区", scores: { [PERSONALITIES.SCAUER]: 1 } }
+        ]
+      },
+      {
+        question: "朋友一般会怎么形容你？",
+        options: [
+          { text: "😻 温柔猫奴 / 喵喵教骨干", scores: { [PERSONALITIES.CAT]: 1 } },
+          { text: "🐄 活力满满的吃货/奶牛爱好者", scores: { [PERSONALITIES.COW]: 1 } },
+          { text: "⏰ 永远在冲刺的时间管理大师", scores: { [PERSONALITIES.EARLY]: 1 } },
+          { text: "🌦️ 细心靠谱的天气预报员", scores: { [PERSONALITIES.UMBRELLA]: 1 } },
+          { text: "📚 华农百事通/田园实干家", scores: { [PERSONALITIES.SCAUER]: 1 } }
+        ]
+      },
+      {
+        question: "看到「SCAU」你脑海中最先浮现？",
+        options: [
+          { text: "🐱 Smile and Meow (喵喵教)", scores: { [PERSONALITIES.CAT]: 1 } },
+          { text: "🐮 酸奶 · 奶牛 · 华农学士", scores: { [PERSONALITIES.COW]: 1 } },
+          { text: "⏰ 早八的铃声与奔跑", scores: { [PERSONALITIES.EARLY]: 1 } },
+          { text: "☔️ 雨季 · 人人带伞的默契", scores: { [PERSONALITIES.UMBRELLA]: 1 } },
+          { text: "🌾 五湖四海一片林 · 西点屋", scores: { [PERSONALITIES.SCAUER]: 1 } }
+        ]
+      }
+    ];
+
+    // ---------- 状态管理 ----------
+    let currentStep = 'start';        // 'start', 'quiz', 'result'
+    let currentQIndex = 0;
+    const totalQuestions = questions.length;
+    // 存储每道题所选选项索引 (0~4)
+    let answers = new Array(totalQuestions).fill(null);
+    
+    // DOM 元素
+    const viewStart = document.getElementById('viewStart');
+    const viewQuiz = document.getElementById('viewQuiz');
+    const viewResult = document.getElementById('viewResult');
+    const startBtn = document.getElementById('startBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const questionText = document.getElementById('questionText');
+    const optionsDiv = document.getElementById('optionsContainer');
+    const currentQNumberSpan = document.getElementById('currentQNumber');
+    const totalQNumberSpan = document.getElementById('totalQNumber');
+    const progressFill = document.getElementById('progressFill');
+    const resultContent = document.getElementById('resultContent');
+
+    totalQNumberSpan.textContent = totalQuestions;
+
+    // 辅助: 切换视图
+    function setView(step) {
+      currentStep = step;
+      viewStart.classList.add('hidden');
+      viewQuiz.classList.add('hidden');
+      viewResult.classList.add('hidden');
+      if (step === 'start') viewStart.classList.remove('hidden');
+      if (step === 'quiz') viewQuiz.classList.remove('hidden');
+      if (step === 'result') viewResult.classList.remove('hidden');
+    }
+
+    // 重置测验
+    function resetQuiz() {
+      answers = new Array(totalQuestions).fill(null);
+      currentQIndex = 0;
+      renderQuestion();
+      updateProgressAndNav();
+    }
+
+    // 渲染当前题目
+    function renderQuestion() {
+      const q = questions[currentQIndex];
+      questionText.textContent = q.question;
+      
+      // 生成选项html
+      let html = '';
+      const selectedIdx = answers[currentQIndex];
+      q.options.forEach((opt, idx) => {
+        const prefixLetter = String.fromCharCode(65 + idx); // A,B,C,D,E
+        const selectedClass = (selectedIdx === idx) ? 'selected' : '';
+        html += `
+          <div class="option ${selectedClass}" data-option-index="${idx}">
+            <span class="option-prefix">${prefixLetter}</span>
+            ${opt.text}
+          </div>
+        `;
+      });
+      optionsDiv.innerHTML = html;
+      
+      // 绑定选项点击事件
+      document.querySelectorAll('.option').forEach(el => {
+        el.addEventListener('click', (e) => {
+          const index = parseInt(el.dataset.optionIndex, 10);
+          selectOption(currentQIndex, index);
+        });
+      });
+
+      // 更新题号显示
+      currentQNumberSpan.textContent = currentQIndex + 1;
+    }
+
+    // 选择选项
+    function selectOption(qIndex, optIndex) {
+      if (qIndex !== currentQIndex) return;
+      answers[qIndex] = optIndex;
+      renderQuestion();  // 刷新高亮
+      updateProgressAndNav();
+    }
+
+    // 更新进度条和按钮状态
+    function updateProgressAndNav() {
+      const progressPercent = ((currentQIndex + 1) / totalQuestions) * 100;
+      progressFill.style.width = progressPercent + '%';
+      
+      // 上一题按钮
+      prevBtn.disabled = (currentQIndex === 0);
+      
+      // 下一题/查看结果
+      if (currentQIndex === totalQuestions - 1) {
+        nextBtn.innerHTML = '查看结果 ✨';
+      } else {
+        nextBtn.innerHTML = '下一题 <i class="fas fa-chevron-right"></i>';
+      }
+      
+      // 如果当前题目未选，不能进入下一题 (但可以点上一题)
+      const isCurrentAnswered = answers[currentQIndex] !== null;
+      nextBtn.disabled = !isCurrentAnswered;
+    }
+
+    // 下一题逻辑
+    function handleNext() {
+      if (answers[currentQIndex] === null) {
+        alert('🐾 请先选择一个选项～');
+        return;
+      }
+      
+      if (currentQIndex === totalQuestions - 1) {
+        // 计算最终人格并展示结果
+        calculateAndShowResult();
+      } else {
+        currentQIndex++;
+        renderQuestion();
+        updateProgressAndNav();
+      }
+    }
+
+    function handlePrev() {
+      if (currentQIndex > 0) {
+        currentQIndex--;
+        renderQuestion();
+        updateProgressAndNav();
+      }
+    }
+
+    // 计算得分并展示结果
+    function calculateAndShowResult() {
+      // 初始化分数
+      let scores = {
+        [PERSONALITIES.CAT]: 0,
+        [PERSONALITIES.COW]: 0,
+        [PERSONALITIES.EARLY]: 0,
+        [PERSONALITIES.UMBRELLA]: 0,
+        [PERSONALITIES.SCAUER]: 0
+      };
+      
+      // 累加每道题
+      answers.forEach((optIdx, qIdx) => {
+        if (optIdx !== null) {
+          const option = questions[qIdx].options[optIdx];
+          const scoreMap = option.scores;
+          for (let personality in scoreMap) {
+            if (scores.hasOwnProperty(personality)) {
+              scores[personality] += scoreMap[personality];
+            }
+          }
+        }
+      });
+      
+      // 找出最高分人格
+      let maxScore = -1;
+      let topPersonality = PERSONALITIES.SCAUER; // fallback
+      for (let p in scores) {
+        if (scores[p] > maxScore) {
+          maxScore = scores[p];
+          topPersonality = p;
+        }
+      }
+      
+      // 如果有多个同分，取第一个（但趣味性足够）
+      const result = personalityDetails[topPersonality];
+      
+      // 结果图片映射
+      const personalityImages = {
+        cat:   'sacu测试/wps (1).png',
+        cow:   'sacu测试/wps.png',
+        early:'sacu测试/wps (2).png',
+        umbrella:'sacu测试/wps (3).png' ,
+        scauer: 'sacu测试/wps (4).png'
+      };
+
+      // 渲染结果卡片，插入图片
+      const imgSrc = personalityImages[topPersonality] || '';
+      const imgHtml = imgSrc ? `<img src="${imgSrc}" alt="${result.name}" style="max-width: 180px; border-radius: 24px; margin: 12px auto 10px; display: block; box-shadow: 0 4px 16px #e0e7d3;">` : '';
+      const resultHtml = `
+        <div class="personality-badge">
+          ${imgHtml}
+          <div class="result-icon">${result.icon}</div>
+          <div class="result-title">${result.name}</div>
+          <div class="result-sub">${result.tagline}</div>
+        </div>
+        <div class="result-desc">
+          <span class="stats-highlight">${result.highlight}</span><br><br>
+          ${result.desc}
+          <div style="margin-top: 16px; border-top: 1px dashed #b1cf97; padding-top: 14px; color: #4f6e36;">
+            <i class="fas fa-feather-alt"></i> ${result.extra}
+          </div>
+        </div>
+        <p style="margin: 8px 0 0; color: #6a7e58;"><i class="far fa-smile"></i> 你是独一无二的SCAUer</p>
+      `;
+      resultContent.innerHTML = resultHtml;
+      setView('result');
+    }
+
+    // 事件绑定
+    startBtn.addEventListener('click', () => {
+      resetQuiz();
+      setView('quiz');
+    });
+
+    prevBtn.addEventListener('click', handlePrev);
+    nextBtn.addEventListener('click', handleNext);
+
+    restartBtn.addEventListener('click', () => {
+      resetQuiz();
+      setView('quiz');
+    });
+
+    // 额外：如果点击result页面的再测一次也是restartBtn
+    // 初始化显示开始页
+    setView('start');
+
+    // 可选：处理从结果页直接再测（按钮已存在）
+    // 若用户想从header回到开始？不需要。完美。
+    
+    // 适配移动点击
+  })();
+</script>
+</body>
+</html>
