@@ -405,6 +405,7 @@
         name: '喵信徒',
         tagline: 'SMILEandMEOW · 我信仰喵喵教！',
         icon: '🐱🙌',
+        img: 'wps (1).png',
         desc: `恭喜您，您解锁的是治愈系稀有人格，仅占世界人口0.03%。<br><br>
               吸猫人内心柔软且充满善意，热爱所有毛茸茸的小生命，在校园里一碰见小猫就会立刻停下脚步，蹲下来发出软乎乎的怪动静。这种人格能精准感知到校园里每一只小猫的出没位置，那就是他们心里最向往的治愈栖息地。走进吸猫人的生活，就像走进了一个治愈乌托邦：永远为可爱心软，永远为毛茸茸奔赴，您是仅占0.03%的校园温柔收藏家。`,
         highlight: '🐈 喵喵教 · 仅0.03%',
@@ -414,6 +415,7 @@
         name: '奶牛人',
         tagline: 'COW-MAN · 农农 华农学士 原味酸牛奶',
         icon: '🐄🥛',
+        img: 'wps.png',
         desc: `恭喜您，您测出的不是一个普通人格，您是一种极其珍稀的，仅占世界人口0.0002%的奶牛人。奶牛人们的内心通常充满活力，热爱自然与阳光，偶尔也会犯点小小糊涂，因此这种人格能精确地感知到周围最鲜美的草甸位置也就是他们心里最向往的栖息地。走进奶牛人的生活，就像走进了一个梦幻牧场：需要充足的阳光和鲜嫩草，您是一种极其珍稀的，仅占0.1%的情感交流。（啊好想炫酸奶！）`,
         highlight: '🐮 0.0002% · 梦幻牧场主',
         extra: 'COW-MAN · 酸奶原教旨主义者'
@@ -422,6 +424,7 @@
         name: '早八人',
         tagline: 'A!LATER · 啊！等等，要迟到了',
         icon: '⏰🏃',
+        img: 'wps (2).png',
         desc: `早八人们的日常被清晨的闹钟唤醒，穿梭在校园马路，为了不迟到全力冲刺。他们是时间追赶者，在忙碌中寻找生活的节奏，像清晨第一阳光，怀揣活力与执着，奔向属于自己的战场，给早八的一杯咖啡，开启忙碌的早间时光。`,
         highlight: '🏁 时间追赶者 · 永远在路上',
         extra: '早八战神 · 咖啡续命'
@@ -430,6 +433,7 @@
         name: '雨伞持有者',
         tagline: 'Umbrella-Keeper · 清明时节雨纷纷…',
         icon: '☔️🌧️',
+        img: 'wps (3).png',
         desc: `恭喜您，您与99%的华农人达成【记得带伞】默契成就！近几月，无论下的是倾盆大雨还是补水喷雾，都要抓紧手中的雨伞。忘记带伞怎么办？捂住头发向前冲吧！您拥有未雨绸缪的从容，也是雨季的守护者。`,
         highlight: '☂️ 与99%华农人达成带伞默契',
         extra: 'Umbrella-Keeper · 雨再大也不怕'
@@ -438,6 +442,7 @@
         name: '华农特质型',
         tagline: 'SCAUer · 我真的…是华农特质型吗？',
         icon: '🌾🧑‍🌾',
+        img: 'wps (4).png',
         desc: `走进SCAUer的生活，就像走进巨型田园乐园：有试验田的泥土香，有西点屋的甜香，有五湖四海的绿意，当然还有一群踏踏实实又鲜活的灵魂。给SCAUer一份信任，乐于行动的他们会用行动给你较稳的答案。`,
         highlight: '🌿 五湖四海 · 田园实干家',
         extra: 'SCAUer · 踏实浪漫'
@@ -693,18 +698,8 @@
       // 如果有多个同分，取第一个（但趣味性足够）
       const result = personalityDetails[topPersonality];
       
-      // 结果图片映射
-      const personalityImages = {
-        cat:   'wps (1).png',
-        cow:   'wps.png',
-        early:'wps (2).png',
-        umbrella:'wps (3).png',
-        scauer: 'wps (4).png'
-      };
-
-      // 渲染结果卡片，插入图片
-      const imgSrc = personalityImages[topPersonality] || '';
-      const imgHtml = imgSrc ? `<img src="${imgSrc}" alt="${result.name}" style="max-width: 180px; border-radius: 24px; margin: 12px auto 10px; display: block; box-shadow: 0 4px 16px #e0e7d3;">` : '';
+      // 渲染结果卡片，直接从 result.img 读取图片路径
+      const imgHtml = result.img ? `<img src="${result.img}" alt="${result.name}" style="max-width: 180px; border-radius: 24px; margin: 12px auto 10px; display: block; box-shadow: 0 4px 16px #e0e7d3;">` : '';
       const resultHtml = `
         <div class="personality-badge">
           ${imgHtml}
